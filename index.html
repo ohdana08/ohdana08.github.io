@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오예림 AI 강사 — AI를 내 상황에 맞게 바로 쓰게 만드는 곳</title>
+<meta name="description" content="AI 몰라도 됩니다. 내 상황에서 바로 쓰는 법, 처음부터 같이 만들어드립니다. 380+ 기관, 2,000+ 수강생, 13년.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0e0e0e; --white:#f5f4f0;
+  --gold:#c8960a; --gold-light:#e8b424;
+  --red:#c0392b;
+  --g1:#f0efe9; --g2:#e0dfd8; --g3:#999; --g4:#444;
+  --serif:'Noto Serif KR',serif; --sans:'Noto Sans KR',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--black);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(14,14,14,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--white);text-decoration:none;letter-spacing:.06em}
+.nav-logo em{font-style:normal;color:var(--gold)}
+.nav-center{display:flex;align-items:center;gap:4px}
+.nav-item{position:relative}
+.nav-link{font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;padding:8px 14px;display:flex;align-items:center;gap:5px;transition:color .2s;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:var(--sans)}
+.nav-link:hover,.nav-item:hover .nav-link{color:var(--white)}
+.nav-arrow{font-size:8px;opacity:.4;transition:transform .2s;display:inline-block}
+.nav-item:hover .nav-arrow{transform:rotate(180deg);opacity:.7}
+.nav-dropdown{position:absolute;top:calc(100% + 8px);left:0;background:var(--white);border-radius:2px;min-width:160px;box-shadow:0 8px 32px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(6px);transition:all .2s}
+.nav-item:hover .nav-dropdown{opacity:1;pointer-events:all;transform:translateY(0)}
+.nav-dropdown a{display:block;font-size:13px;color:var(--black);text-decoration:none;padding:12px 18px;border-bottom:1px solid var(--g2);transition:background .15s}
+.nav-dropdown a:last-child{border-bottom:none}
+.nav-dropdown a:hover{background:var(--g1)}
+.nav-cta{font-size:12px;font-weight:700;color:var(--black);background:var(--gold-light);padding:9px 20px;border-radius:3px;text-decoration:none;letter-spacing:.04em;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--black);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 100%,rgba(200,150,10,.12) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;opacity:0;animation:fadeUp .6s .2s forwards}
+.hero h1{font-family:var(--serif);font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:14px;opacity:0;animation:fadeUp .6s .35s forwards}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:clamp(.95rem,2vw,1.3rem);color:rgba(255,255,255,.4);font-weight:300;line-height:1.75;margin-bottom:52px;opacity:0;animation:fadeUp .6s .5s forwards}
+.hero-sub strong{color:rgba(255,255,255,.75);font-weight:500}
+.hero-proof{display:flex;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden;opacity:0;animation:fadeUp .6s .7s forwards}
+.hp{padding:22px 38px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.hp:last-child{border-right:none}
+.hp-n{font-family:var(--serif);font-size:2.1rem;font-weight:900;color:var(--gold-light);line-height:1;margin-bottom:6px}
+.hp-l{font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.08em}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.18);letter-spacing:.2em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero-scroll::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.15),transparent)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* 공통 */
+.wrap{max-width:1120px;margin:0 auto;padding:0 48px}
+.sec-kicker{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.sec-title{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.18;margin-bottom:14px}
+.sec-title em{font-style:normal;color:var(--gold)}
+.sec-desc{font-size:14px;color:var(--g3);font-weight:300;line-height:1.85}
+
+/* 공감 */
+.empathy{background:var(--g1);padding:100px 0}
+.emp-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:52px}
+.emp-card{background:var(--white);padding:40px;position:relative}
+.emp-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--g2)}
+.emp-card.on::before{background:var(--red)}
+.emp-q{font-family:var(--serif);font-size:1.2rem;font-weight:700;line-height:1.45;margin-bottom:14px}
+.emp-a{font-size:13px;color:var(--g3);line-height:1.85;font-weight:300}
+.emp-a strong{color:var(--black);font-weight:700}
+.emp-resolve{margin-top:52px;background:var(--black);color:var(--white);padding:52px;text-align:center}
+.emp-resolve-title{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:900;line-height:1.28;margin-bottom:10px}
+.emp-resolve-title em{color:var(--gold);font-style:normal}
+.emp-resolve-sub{font-size:13px;color:rgba(255,255,255,.35);font-weight:300}
+
+/* 상황별 선택 */
+.path{padding:100px 0}
+.path-intro{margin-bottom:52px}
+.path-q{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:900;line-height:1.2;margin-bottom:8px}
+.path-q em{font-style:normal;color:var(--red)}
+.path-cards-wrap{position:relative}
+.path-hint{font-size:11px;color:var(--g3);font-weight:300;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.path-hint::before{content:'→';color:var(--gold)}
+.path-cards{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:16px;scrollbar-width:none}
+.path-cards::-webkit-scrollbar{display:none}
+.path-card{border:1.5px solid var(--g2);padding:36px 30px;border-radius:2px;position:relative;background:var(--white);transition:border-color .25s;flex-shrink:0;width:320px;scroll-snap-align:start}
+.path-card:hover{border-color:var(--black)}
+.path-card.featured{border-color:var(--gold);background:#fffdf4}
+.path-badge{position:absolute;top:-13px;left:24px;background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:4px 12px;letter-spacing:.08em}
+.path-tag{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g3);margin-bottom:20px}
+.path-card.featured .path-tag{color:var(--gold)}
+.path-state{font-size:13px;color:var(--g3);font-weight:300;line-height:1.75;margin-bottom:24px}
+.path-state strong{display:block;font-family:var(--serif);font-size:1.1rem;font-weight:900;color:var(--black);margin-bottom:6px}
+.path-product{font-family:var(--serif);font-size:1.4rem;font-weight:900;margin-bottom:6px;line-height:1.3}
+.path-price{font-size:12px;color:var(--g3);font-weight:300;margin-bottom:24px}
+.path-btn{display:block;text-align:center;padding:13px;font-size:13px;font-weight:700;letter-spacing:.05em;text-decoration:none;border-radius:2px;transition:all .2s}
+.btn-outline{border:1.5px solid var(--black);color:var(--black)}
+.btn-outline:hover{background:var(--black);color:var(--white)}
+.btn-fill{background:var(--gold);color:var(--black)}
+.btn-fill:hover{background:var(--gold-light)}
+
+/* 결과 */
+.result{background:var(--black);padding:100px 0}
+.result-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px}
+.result-header .sec-kicker{color:var(--gold)}
+.result-header .sec-title{color:var(--white)}
+.result-more{font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;letter-spacing:.1em;transition:color .2s;white-space:nowrap}
+.result-more:hover{color:var(--gold)}
+.result-grid{display:flex;gap:2px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+.result-grid::-webkit-scrollbar{display:none}
+.rc{background:#161616;padding:40px;flex-shrink:0;width:380px;scroll-snap-align:start}
+.rc.hot{background:#1c1a12;border:1px solid rgba(200,150,10,.18)}
+.rc-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;padding:4px 10px;margin-bottom:20px}
+.tag-gold{background:rgba(200,150,10,.15);color:var(--gold-light)}
+.tag-red{background:rgba(192,57,43,.15);color:#e74c3c}
+.rc-quote{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--white);line-height:1.55;margin-bottom:20px}
+.rc-quote em{color:var(--gold-light);font-style:normal}
+.rc-bar{font-size:12px;font-weight:700;color:rgba(255,255,255,.85);background:rgba(255,255,255,.06);padding:10px 14px;margin-bottom:20px;border-left:2px solid var(--gold)}
+.rc-footer{display:flex;justify-content:space-between;align-items:flex-end}
+.rc-ba{display:flex;gap:18px}
+.ba-item{font-size:11px;font-weight:300;color:rgba(255,255,255,.3)}
+.ba-item strong{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.65);margin-top:2px}
+.rc-who{font-size:11px;color:rgba(255,255,255,.2);text-align:right}
+
+/* HOW */
+.how{padding:100px 0;background:var(--g1)}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-top:52px}
+.how-steps{display:flex;flex-direction:column}
+.how-step{display:flex;gap:24px;padding:28px 0;border-bottom:1px solid var(--g2)}
+.how-step:last-child{border-bottom:none}
+.how-num{font-family:var(--serif);font-size:2.4rem;font-weight:900;color:var(--g2);line-height:1;min-width:48px;flex-shrink:0}
+.how-step-title{font-family:var(--serif);font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.how-step-desc{font-size:13px;color:var(--g3);line-height:1.8;font-weight:300}
+.how-step-desc strong{color:var(--black);font-weight:700}
+.how-box{background:var(--black);padding:44px}
+.how-box-title{font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.12em;margin-bottom:24px;font-weight:300}
+.diff-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.diff-row:last-child{border-bottom:none}
+.diff-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.di-x{background:rgba(192,57,43,.2);color:#e74c3c}
+.di-o{background:rgba(200,150,10,.15);color:var(--gold-light)}
+.diff-text{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;font-weight:300}
+.diff-text strong{color:var(--white);font-weight:500}
+
+/* 신뢰 */
+.trust{padding:100px 0}
+.trust-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:52px}
+.tn{padding:40px;background:var(--g1);text-align:center}
+.tn-n{font-family:var(--serif);font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:8px}
+.tn-n em{font-style:normal;color:var(--gold)}
+.tn-l{font-size:11px;color:var(--g3);font-weight:300;letter-spacing:.06em}
+.org-wrap{margin-top:48px}
+.org-label{font-size:12px;color:var(--g3);font-weight:300;margin-bottom:16px;letter-spacing:.04em}
+.org-list{display:flex;flex-wrap:wrap;gap:8px}
+.org-tag{font-size:12px;color:var(--g4);border:1px solid var(--g2);padding:6px 14px;border-radius:2px}
+
+/* 상품 */
+.products{background:var(--black);padding:100px 0}
+.products .sec-kicker{color:var(--gold)}
+.products .sec-title{color:var(--white)}
+.products .sec-desc{color:rgba(255,255,255,.3)}
+.scroll-hint{font-size:11px;color:rgba(255,255,255,.22);font-weight:300;margin-top:14px;display:flex;align-items:center;gap:5px}
+.scroll-hint::before{content:'→';color:var(--gold);opacity:.5}
+.prod-grid{display:flex;gap:2px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none;margin-top:52px}
+.prod-grid::-webkit-scrollbar{display:none}
+.prod{background:#161616;padding:32px 26px;transition:background .2s;flex-shrink:0;width:280px;scroll-snap-align:start}
+.prod:hover{background:#1c1c1c}
+.prod.hot{background:#1e1b10;border-top:2px solid var(--gold)}
+.prod-lv{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:16px}
+.prod-name{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3}
+.prod-desc{font-size:12px;color:rgba(255,255,255,.3);line-height:1.7;font-weight:300;margin-bottom:22px}
+.prod-price{font-family:var(--serif);font-size:1.55rem;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px}
+.prod-price em{font-style:normal;color:var(--gold)}
+.prod-price-sub{font-size:11px;color:rgba(255,255,255,.22);margin-bottom:20px}
+.prod-list{list-style:none;margin-bottom:24px}
+.prod-list li{font-size:11px;color:rgba(255,255,255,.38);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-weight:300}
+.prod-list li::before{content:'— ';color:var(--gold);opacity:.4}
+.prod-btn{display:block;text-align:center;padding:12px;font-size:12px;font-weight:700;letter-spacing:.07em;text-decoration:none;border-radius:1px;transition:all .2s}
+.pb-outline{border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.45)}
+.pb-outline:hover{border-color:rgba(255,255,255,.35);color:var(--white)}
+.pb-gold{background:var(--gold);color:var(--black)}
+.pb-gold:hover{background:var(--gold-light)}
+
+/* 최종 CTA */
+.final-cta{padding:120px 48px;text-align:center}
+.fc-kicker{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--g3);margin-bottom:18px}
+.fc-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,3.2rem);font-weight:900;line-height:1.18;margin-bottom:14px}
+.fc-title em{font-style:normal;color:var(--red)}
+.fc-sub{font-size:14px;color:var(--g3);font-weight:300;line-height:1.85;margin-bottom:44px}
+.fc-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.fc-main{background:var(--black);color:var(--white);padding:18px 52px;font-size:14px;font-weight:700;letter-spacing:.08em;text-decoration:none;border-radius:2px;transition:all .2s}
+.fc-main:hover{background:var(--gold);color:var(--black)}
+.fc-sub-btn{border:1.5px solid var(--g2);color:var(--g4);padding:18px 40px;font-size:13px;font-weight:500;text-decoration:none;border-radius:2px;transition:all .2s}
+.fc-sub-btn:hover{border-color:var(--black);color:var(--black)}
+
+/* FOOTER */
+footer{background:var(--black);padding:48px;text-align:center}
+.footer-logo{font-family:var(--serif);font-size:13px;font-weight:700;color:rgba(255,255,255,.25);margin-bottom:16px}
+.footer-logo em{color:var(--gold);font-style:normal}
+.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:20px}
+.footer-links a{font-size:11px;color:rgba(255,255,255,.22);text-decoration:none;letter-spacing:.07em;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-info{font-size:11px;color:rgba(255,255,255,.12);font-weight:300;line-height:2}
+
+-bottom:1px solid rgba(255,255,255,.08)}
+  .trust-nums,.prod-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">오예림 <em>AI</em> 강사</a>
+  <div class="nav-center">
+    <div class="nav-item">
+      <span class="nav-link">과정 소개 <span class="nav-arrow">▼</span></span>
+      <div class="nav-dropdown">
+        <a href="#path">상황별 선택</a>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" target="_blank">AI 첫 체험 강의</a>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" target="_blank">AI 5일 실행 챌린지</a>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" target="_blank">AI 실전 워크샵</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <span class="nav-link">수강생 후기 <span class="nav-arrow">▼</span></span>
+      <div class="nav-dropdown">
+        <a href="reviews-final.html">후기 퍼널 보기</a>
+        <a href="review-gen.html">내 결과 확인</a>
+        <a href="reviews.html">전체 후기</a>
+      </div>
+    </div>
+    <a href="#trust" class="nav-link">강사 소개</a>
+  </div>
+  <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="nav-cta" target="_blank">무료 상담 →</a>
+</nav>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">부산 · AI 교육 전문가 · 13년</p>
+  <h1>AI 몰라도<br><em>됩니다</em></h1>
+  <p class="hero-sub">
+    내 상황에서 바로 쓰는 법,<br>
+    <strong>처음부터 같이 만들어드립니다</strong>
+  </p>
+  <div class="hero-proof">
+    <div class="hp"><div class="hp-n">380<span style="font-size:1.1rem">+</span></div><div class="hp-l">수강 기관</div></div>
+    <div class="hp"><div class="hp-n">2,000<span style="font-size:1.1rem">+</span></div><div class="hp-l">누적 수강생</div></div>
+    <div class="hp"><div class="hp-n">13<span style="font-size:1.1rem">+</span></div><div class="hp-l">년 경력</div></div>
+    <div class="hp"><div class="hp-n">76<span style="font-size:1.1rem">+</span></div><div class="hp-l">실제 후기</div></div>
+  </div>
+  <div class="hero-scroll">scroll</div>
+</section>
+
+<!-- 2. 문제 공감 -->
+<section class="empathy">
+  <div class="wrap">
+    <p class="sec-kicker">이런 분이라면</p>
+    <h2 class="sec-title">AI 써야 한다는 건 아는데<br><em>막막하죠?</em></h2>
+    <div class="emp-grid">
+      <div class="emp-card on">
+        <p class="emp-q">"AI 강의 들어도 막상 쓰려면 모르겠어요"</p>
+        <p class="emp-a">배우는 것과 적용하는 건 다릅니다.<br><strong>내 상황에 맞는 실습</strong>이 없어서 그래요.</p>
+      </div>
+      <div class="emp-card on">
+        <p class="emp-q">"뭘 먼저 시작해야 할지 모르겠어요"</p>
+        <p class="emp-a">AI 툴이 너무 많아서 오히려 혼란스럽죠.<br><strong>내 목적에 맞는 것 하나</strong>만 제대로 하면 됩니다.</p>
+      </div>
+      <div class="emp-card">
+        <p class="emp-q">"50대인데 저도 할 수 있을까요?"</p>
+        <p class="emp-a">나이보다 중요한 건 방식입니다.<br><strong>당일 결과물</strong>을 만들어낸 50대 수강생이 있습니다.</p>
+      </div>
+      <div class="emp-card">
+        <p class="emp-q">"AI 강사가 많아서 누구를 믿어야 할지..."</p>
+        <p class="emp-a">강의 경력이 아닌 <strong>수강생의 실제 결과</strong>로 판단하세요.<br>76개 이상의 실제 후기가 있습니다.</p>
+      </div>
+    </div>
+    <div class="emp-resolve">
+      <p class="emp-resolve-title">배우는 게 아니라<br><em>결과를 만드는 교육</em>입니다</p>
+      <p class="emp-resolve-sub">강의 끝나고 혼자 남겨두지 않습니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 상황별 선택 -->
+<section class="path">
+  <div class="wrap">
+    <div class="path-intro">
+      <p class="sec-kicker">지금 내 상황은?</p>
+      <h2 class="path-q">어디서 시작해야 할지<br><em>바로 알려드립니다</em></h2>
+      <p class="sec-desc" style="margin-top:10px">상품이 아니라 지금 내 상태 기준으로 고르세요</p>
+      <p class="path-hint" style="margin-top:14px;font-size:11px;color:var(--g3);display:flex;align-items:center;gap:6px"><span style="color:var(--gold)">→</span> 옆으로 넘겨보세요</p>
+    </div>
+    <div class="path-cards">
+      <div class="path-card">
+        <p class="path-tag">입문자</p>
+        <div class="path-state">
+          <strong>AI가 처음인 분</strong>
+          뭔지는 알겠는데 한 번도 써본 적 없어요. 일단 내 눈으로 확인하고 싶어요.
+        </div>
+        <p class="path-product">AI 첫 체험 강의</p>
+        <p class="path-price">3~9만원 · 1회</p>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="path-btn btn-outline" target="_blank">시작하기 →</a>
+      </div>
+      <div class="path-card featured">
+        <div class="path-badge">🔥 가장 많이 선택</div>
+        <p class="path-tag">실행형</p>
+        <div class="path-state">
+          <strong>써봤지만 활용을 못 하는 분</strong>
+          AI를 알긴 하는데 실제로 내 업무에 쓰질 못하고 있어요. 결과물을 만들고 싶어요.
+        </div>
+        <p class="path-product">AI 5일 실행 챌린지</p>
+        <p class="path-price">29,900원 · 5일 · 최대 10명</p>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="path-btn btn-fill" target="_blank">챌린지 신청하기 →</a>
+      </div>
+      <div class="path-card">
+        <p class="path-tag">사업 적용</p>
+        <div class="path-state">
+          <strong>취업·창업·업무에 AI를 연결하고 싶은 분</strong>
+          AI를 내 사업이나 커리어에 전략적으로 연결하고 싶어요.
+        </div>
+        <p class="path-product">AI 실전 워크샵<br>· 1:1 컨설팅</p>
+        <p class="path-price">29~150만원</p>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="path-btn btn-outline" target="_blank">과정 문의하기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 결과 증명 -->
+<section class="result">
+  <div class="wrap">
+    <div class="result-header">
+      <div>
+        <p class="sec-kicker">실제 결과</p>
+        <h2 class="sec-title">"나도 저렇게 되겠네"가<br>느껴지는 순간들</h2>
+      </div>
+      <a href="reviews-final.html" class="result-more">전체 후기 보기 →</a>
+    </div>
+    <p class="scroll-hint">옆으로 넘겨보세요</p>
+    <div class="result-grid">
+      <div class="rc hot">
+        <span class="rc-tag tag-gold">🔥 즉시 활용</span>
+        <p class="rc-quote">"처음 배우는 건데도 귀에 쏙쏙 들어왔어요.<br>덕분에 <em>바로 그날 릴스·쇼츠를 직접 만들었어요</em>"</p>
+        <p class="rc-bar">→ 수강 당일 릴스·쇼츠 직접 제작 완료</p>
+        <div class="rc-footer">
+          <div class="rc-ba">
+            <div class="ba-item">Before <strong>AI 완전 초보</strong></div>
+            <div class="ba-item">Result <strong>당일 콘텐츠 완성</strong></div>
+          </div>
+          <p class="rc-who">팽팽팽 · 김해여성인력개발센터</p>
+        </div>
+      </div>
+      <div class="rc">
+        <span class="rc-tag tag-red">결과를 생성</span>
+        <p class="rc-quote">"4일 만에 사업계획서를 직접 완성했어요.<br><em>창업이 훨씬 가깝게 느껴졌습니다</em>"</p>
+        <p class="rc-bar">→ 4일 수업 후 사업계획서 직접 완성</p>
+        <div class="rc-footer">
+          <div class="rc-ba">
+            <div class="ba-item">Before <strong>창업이 막막</strong></div>
+            <div class="ba-item">Result <strong>사업계획서 완성</strong></div>
+          </div>
+          <p class="rc-who">이유현 · 청년단기창업클래스</p>
+        </div>
+      </div>
+      <div class="rc">
+        <span class="rc-tag tag-red">초보 → 가능</span>
+        <p class="rc-quote">"50대에도 할 수 있다는<br><em>자존감을 얻었습니다</em>"</p>
+        <p class="rc-bar">→ AI·이력서·면접 요령 한 번에 습득</p>
+        <div class="rc-footer">
+          <div class="rc-ba">
+            <div class="ba-item">Before <strong>"이 나이에" 불안</strong></div>
+            <div class="ba-item">Result <strong>자존감 + 취업 무기</strong></div>
+          </div>
+          <p class="rc-who">이진숙 · 취업 재도전</p>
+        </div>
+      </div>
+      <div class="rc">
+        <span class="rc-tag tag-gold">업무 자동화</span>
+        <p class="rc-quote">"반복 업무를 AI로 자동화하니<br><em>하루 2시간이 생겼어요</em>"</p>
+        <p class="rc-bar">→ 보고서·자료 정리 자동화 완성</p>
+        <div class="rc-footer">
+          <div class="rc-ba">
+            <div class="ba-item">Before <strong>반복 업무 과부하</strong></div>
+            <div class="ba-item">Result <strong>하루 2시간 절약</strong></div>
+          </div>
+          <p class="rc-who">직장인 수강생 · 부산</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. HOW -->
+<section class="how">
+  <div class="wrap">
+    <p class="sec-kicker">방식의 차이</p>
+    <h2 class="sec-title">다른 강의와<br><em>뭐가 다른가요?</em></h2>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-num">01</div>
+          <div>
+            <p class="how-step-title">내 상황 진단부터 시작</p>
+            <p class="how-step-desc">AI 툴 설명이 아닌 <strong>지금 내가 뭘 만들어야 하는지</strong>부터 정합니다. 목적 없는 학습은 다 잊혀집니다.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">02</div>
+          <div>
+            <p class="how-step-title">당일 결과물 만들기</p>
+            <p class="how-step-desc">강의 당일 <strong>실제 결과물을 손에 들고 나갑니다.</strong> 이력서, 사업계획서, 콘텐츠, 자동화 중 하나.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-num">03</div>
+          <div>
+            <p class="how-step-title">혼자 쓸 수 있는 구조 설계</p>
+            <p class="how-step-desc">강의 후에도 <strong>혼자 계속 쓸 수 있는 시스템</strong>을 만들어드립니다. 일회성 강의가 아닙니다.</p>
+          </div>
+        </div>
+      </div>
+      <div class="how-box">
+        <p class="how-box-title">일반 AI 강의 vs 오예림 강의</p>
+        <div class="diff-row"><div class="diff-icon di-x">✕</div><p class="diff-text">ChatGPT 기능 설명 → <strong>집에서 못 씀</strong></p></div>
+        <div class="diff-row"><div class="diff-icon di-o">✓</div><p class="diff-text"><strong>내 업무 자료로 바로 실습</strong> → 당일 완성</p></div>
+        <div class="diff-row"><div class="diff-icon di-x">✕</div><p class="diff-text">이론 위주 강의 → <strong>적용 방법 모름</strong></p></div>
+        <div class="diff-row"><div class="diff-icon di-o">✓</div><p class="diff-text"><strong>목적별 프롬프트 설계</strong> → 반복 사용 가능</p></div>
+        <div class="diff-row"><div class="diff-icon di-x">✕</div><p class="diff-text">강의 끝 → <strong>혼자 남겨짐</strong></p></div>
+        <div class="diff-row"><div class="diff-icon di-o">✓</div><p class="diff-text"><strong>KakaoTalk 1:1 사후 지원</strong> → 계속 쓸 수 있게</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 신뢰 -->
+<section class="trust">
+  <div class="wrap">
+    <p class="sec-kicker">숫자로 말합니다</p>
+    <h2 class="sec-title">13년이<br><em>증명합니다</em></h2>
+    <div class="trust-nums">
+      <div class="tn"><p class="tn-n">380<em>+</em></p><p class="tn-l">수강 기관</p></div>
+      <div class="tn"><p class="tn-n">2,000<em>+</em></p><p class="tn-l">누적 수강생</p></div>
+      <div class="tn"><p class="tn-n">13<em>+</em></p><p class="tn-l">년 강의 경력</p></div>
+      <div class="tn"><p class="tn-n">76<em>+</em></p><p class="tn-l">실제 후기</p></div>
+    </div>
+    <div class="org-wrap">
+      <p class="org-label">강의 기관 (일부)</p>
+      <div class="org-list">
+        <span class="org-tag">부산교통공사</span>
+        <span class="org-tag">부산항만공사</span>
+        <span class="org-tag">경남교육청</span>
+        <span class="org-tag">부산시 여성새로일하기센터</span>
+        <span class="org-tag">청년단기창업클래스</span>
+        <span class="org-tag">김해여성인력개발센터</span>
+        <span class="org-tag">부산대학교</span>
+        <span class="org-tag">동의대학교</span>
+        <span class="org-tag">부경대학교</span>
+        <span class="org-tag">각 지역 도서관 380+</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 상품 (마지막 등장) -->
+<section class="products">
+  <div class="wrap">
+    <p class="sec-kicker">상품 안내</p>
+    <h2 class="sec-title">결과가 납득됐다면<br>이제 선택하세요</h2>
+    <p class="sec-desc">내 상황에 맞는 과정을 고르세요</p>
+    <p class="scroll-hint">옆으로 넘겨보세요</p>
+    <div class="prod-grid">
+      <div class="prod">
+        <p class="prod-lv">시작 · 입문</p>
+        <p class="prod-name">AI 첫 체험 강의</p>
+        <p class="prod-desc">처음인데 하나라도 만들어보고 싶은 분</p>
+        <p class="prod-price">3~9<em>만원</em></p>
+        <p class="prod-price-sub">1회 · 릴스·쇼츠 1개 완성</p>
+        <ul class="prod-list">
+          <li>릴스·쇼츠 1개 완성</li>
+          <li>자소서 초안 1개</li>
+          <li>프롬프트 기초</li>
+        </ul>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="prod-btn pb-outline" target="_blank">시작하기</a>
+      </div>
+      <div class="prod hot">
+        <p class="prod-lv">브릿지 · 핵심</p>
+        <p class="prod-name">AI 5일 실행 챌린지</p>
+        <p class="prod-desc">체험을 실제 결과물로 끝내는 5일 집중 과정</p>
+        <p class="prod-price">29,900<em>원</em></p>
+        <p class="prod-price-sub">5일 · 최대 10명 · KakaoTalk 진행</p>
+        <ul class="prod-list">
+          <li>5일 · 최대 10명</li>
+          <li>매일 실습 결과물</li>
+          <li>즉시 활용 구조 완성</li>
+        </ul>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="prod-btn pb-gold" target="_blank">챌린지 신청하기</a>
+      </div>
+      <div class="prod">
+        <p class="prod-lv">적용 · 핵심</p>
+        <p class="prod-name">AI 실전 적용 워크샵</p>
+        <p class="prod-desc">취업·창업·업무에 AI를 제대로 연결하는 과정</p>
+        <p class="prod-price">29~49<em>만원</em></p>
+        <p class="prod-price-sub">맞춤 설계 · 소그룹</p>
+        <ul class="prod-list">
+          <li>자소서·사업계획서 완성</li>
+          <li>맞춤 프롬프트 설계</li>
+          <li>AI별 목적 분리 전략</li>
+        </ul>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="prod-btn pb-outline" target="_blank">적용 과정 문의</a>
+      </div>
+      <div class="prod">
+        <p class="prod-lv">시스템 · 컨설팅</p>
+        <p class="prod-name">1:1 AI 사업 컨설팅</p>
+        <p class="prod-desc">사업 전체에 AI 실행 구조를 설계하는 1:1 맞춤 과정</p>
+        <p class="prod-price">150<em>만원~</em></p>
+        <p class="prod-price-sub">1:1 · 전체 시스템 설계</p>
+        <ul class="prod-list">
+          <li>전체 시스템 설계</li>
+          <li>자동화 구조</li>
+          <li>수익 모델 연결</li>
+        </ul>
+        <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="prod-btn pb-outline" target="_blank">컨설팅 문의</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. 최종 CTA -->
+<section class="final-cta">
+  <p class="fc-kicker">지금 바로</p>
+  <h2 class="fc-title">아직 고민 중이라면<br><em>무료로 먼저 물어보세요</em></h2>
+  <p class="fc-sub">어떤 과정이 맞는지 모르겠다면 카카오톡으로 상황을 알려주세요.<br>가장 빠른 길을 바로 안내해드립니다.</p>
+  <div class="fc-btns">
+    <a href="http://pf.kakao.com/_xbrxjxkxj/chat" class="fc-main" target="_blank">카카오톡 무료 상담 →</a>
+    <a href="reviews-final.html" class="fc-sub-btn">수강생 후기 먼저 보기</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">오예림 <em>AI</em> 강사 · 비즈니스커리어컨설팅</p>
+  <div class="footer-links">
+    <a href="reviews-final.html">수강생 후기</a>
+    <a href="review-gen.html">내 결과 확인</a>
+    <a href="reviews.html">전체 후기</a>
+    <a href="http://pf.kakao.com/_xbrxjxkxj/chat" target="_blank">카카오 채널</a>
+  </div>
+  <p class="footer-info">
+    비즈니스커리어컨설팅 · 대표 오예림 · 부산광역시<br>
+    사업자등록번호: 개인사업자 · 2020년 7월 설립<br>
+    문의: 카카오톡 채널 @비즈니스커리어컨설팅
+  </p>
+</footer>
+
+</body>
+</html>
