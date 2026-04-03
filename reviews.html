@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>수강생 후기 — 오예림 AI 강사</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #111;
+    --white: #fafaf8;
+    --accent: #c84b2f;
+    --accent2: #e8a020;
+    --gray1: #f3f2ef;
+    --gray2: #e2e0db;
+    --gray3: #9a9690;
+    --gray4: #4a4845;
+    --serif: 'Noto Serif KR', serif;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ────────── HERO ────────── */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    padding: 100px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(200,75,47,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent2); }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.55);
+    font-weight: 300;
+    letter-spacing: .02em;
+    margin-bottom: 0;
+  }
+  .hero-hook {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 14px;
+    color: rgba(255,255,255,.38);
+    font-weight: 300;
+    line-height: 1.9;
+    letter-spacing: .01em;
+  }
+  .hero-hook em {
+    color: var(--accent2);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .hero-count {
+    display: inline-flex;
+    gap: 40px;
+    margin-top: 52px;
+    padding: 24px 48px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 4px;
+  }
+  .hero-count-item { text-align: center; }
+  .hero-count-item .num {
+    font-family: var(--serif);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent2);
+    line-height: 1;
+  }
+  .hero-count-item .lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,.45);
+    margin-top: 6px;
+    letter-spacing: .08em;
+  }
+
+  /* ────────── SECTION WRAPPER ────────── */
+  .section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--gray3);
+    font-weight: 300;
+    margin-bottom: 52px;
+    line-height: 1.8;
+  }
+
+  /* ────────── HIGHLIGHT CARDS ────────── */
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .highlight-grid .card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .card {
+    background: var(--black);
+    color: var(--white);
+    border-radius: 6px;
+    padding: 36px 40px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform .25s ease;
+  }
+  .card:hover { transform: translateY(-3px); }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .35s ease;
+  }
+  .card:hover::after { transform: scaleX(1); }
+
+  .card.top {
+    background: var(--accent);
+  }
+  .card.top::after { background: var(--accent2); }
+
+  .card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .card.top .card-badge { background: rgba(255,255,255,.2); color: var(--white); }
+  .card:not(.top) .card-badge { background: rgba(255,255,255,.08); color: rgba(255,255,255,.6); }
+
+  .card-quote {
+    font-family: var(--serif);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 700;
+    line-height: 1.55;
+    margin-bottom: 20px;
+  }
+  .card.top .card-quote { font-size: clamp(1.15rem, 2.5vw, 1.6rem); }
+
+  .card-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .bar-item {
+    font-size: 12px;
+    color: rgba(255,255,255,.55);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.6;
+    flex: 1 1 220px;
+  }
+  .bar-item .bi-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .bi-before { background: rgba(200,75,47,.35); color: #ffb3a0; }
+  .bi-after  { background: rgba(80,180,100,.25); color: #8fe6a0; }
+  .bi-result { background: rgba(232,160,32,.25); color: #ffd07a; }
+
+  /* Result 강조 줄 */
+  .card-result-highlight {
+    display: block;
+    font-size: clamp(.85rem, 1.6vw, 1rem);
+    font-weight: 700;
+    color: var(--accent2);
+    background: rgba(232,160,32,.13);
+    border-left: 3px solid var(--accent2);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin: 12px 0 20px;
+    line-height: 1.5;
+    letter-spacing: .01em;
+  }
+  .card.top .card-result-highlight {
+    background: rgba(255,255,255,.15);
+    border-left-color: #fff;
+    color: #fff;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+  }
+
+  .card-name {
+    font-size: 12px;
+    color: rgba(255,255,255,.35);
+    font-weight: 300;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .card-name strong { color: rgba(255,255,255,.65); font-weight: 500; }
+
+  /* ────────── GRAPH SECTION ────────── */
+  .graph-section {
+    background: var(--gray1);
+    padding: 80px 40px;
+  }
+  .graph-inner { max-width: 1100px; margin: 0 auto; }
+
+  .graph-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 24px;
+  }
+
+  .graph-card {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 32px 28px;
+    border: 1px solid var(--gray2);
+  }
+  .graph-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gray3);
+    margin-bottom: 16px;
+  }
+  .graph-card-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .graph-card-num span { font-size: 1.6rem; color: var(--accent); }
+  .graph-card-desc {
+    font-size: 13px;
+    color: var(--gray3);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .bar-track {
+    background: var(--gray2);
+    border-radius: 2px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s cubic-bezier(.22,1,.36,1);
+  }
+  .bar-fill.animated { transform: scaleX(1); }
+  .bar-fill.amber { background: var(--accent2); }
+  .bar-fill.dark { background: var(--black); }
+
+  /* 분포 차트 */
+  .dist-chart { display: flex; flex-direction: column; gap: 10px; }
+  .dist-row { display: flex; align-items: center; gap: 10px; }
+  .dist-row-label { font-size: 12px; color: var(--gray4); width: 70px; flex-shrink: 0; font-weight: 400; }
+  .dist-row-track { flex: 1; background: var(--gray2); border-radius: 2px; height: 8px; overflow: hidden; }
+  .dist-row-fill {
+    height: 100%;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s cubic-bezier(.22,1,.36,1);
+  }
+  .dist-row-fill.animated { transform: scaleX(1); }
+  .dist-row-pct { font-size: 11px; color: var(--gray3); width: 36px; text-align: right; flex-shrink: 0; }
+
+  /* ────────── ALL REVIEWS ────────── */
+  .all-section { padding: 80px 40px; background: var(--white); }
+  .all-inner { max-width: 1100px; margin: 0 auto; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1px solid var(--gray2);
+    background: transparent;
+    color: var(--gray4);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover { border-color: var(--black); color: var(--black); }
+  .filter-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+  .reviews-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .review-item {
+    border: 1px solid var(--gray2);
+    border-radius: 6px;
+    padding: 24px 26px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .review-item:hover {
+    border-color: var(--gray4);
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+  }
+
+  .review-item-tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .rtag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    padding: 3px 9px;
+    border-radius: 3px;
+  }
+  .rtag.취업 { background: #e6f1fb; color: #0c447c; }
+  .rtag.창업 { background: #eaf3de; color: #27500a; }
+  .rtag.실무 { background: #eeedfe; color: #3c3489; }
+  .rtag.type { background: var(--gray1); color: var(--gray4); }
+
+  .review-item-quote {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--black);
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+  .review-item-quote .accent { color: var(--accent); font-weight: 700; }
+
+  .review-item-bar {
+    font-size: 12px;
+    color: var(--gray3);
+    line-height: 1.7;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray2);
+  }
+  .review-item-bar b { color: var(--gray4); font-weight: 500; }
+  .review-item-name {
+    font-size: 11px;
+    color: var(--gray3);
+    margin-top: 10px;
+    font-weight: 300;
+  }
+  .review-item-name strong { color: var(--black); font-weight: 500; }
+
+  .hidden { display: none; }
+
+  .load-more-wrap { text-align: center; margin-top: 40px; }
+  .load-more-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    padding: 14px 40px;
+    border: 1px solid var(--black);
+    background: transparent;
+    color: var(--black);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .load-more-btn:hover { background: var(--black); color: var(--white); }
+
+  /* ────────── CTA ────────── */
+  .cta-section {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 80px 40px;
+  }
+  .cta-section h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .cta-section p {
+    font-size: 14px;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 36px;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 16px 48px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .cta-btn:hover { background: #a83820; }
+
+  /* ────────── RESPONSIVE ────────── */
+  @media (max-width: 768px) {
+    .hero { padding: 70px 24px 60px; }
+    .hero-count { gap: 24px; padding: 20px 28px; flex-wrap: wrap; }
+    .section { padding: 60px 24px; }
+    .highlight-grid { grid-template-columns: 1fr; }
+    .highlight-grid .card:first-child { grid-column: 1; }
+    .graph-section { padding: 60px 24px; }
+    .graph-grid { grid-template-columns: 1fr; }
+    .all-section { padding: 60px 24px; }
+    .reviews-list { grid-template-columns: 1fr; }
+    .card { padding: 28px 24px; }
+    .card-bar { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-label">수강생 실제 후기</p>
+  <h1>강의 듣고 나서<br><em>바로 달라졌습니다</em></h1>
+  <p class="hero-sub">취업·창업·실무에서 AI를 처음 쓴 분들의 진짜 변화</p>
+  <p class="hero-hook">AI를 어떻게 써야 할지 몰랐던 분들이<br>→ <em>당일 결과를 만든</em> 후기입니다</p>
+  <div class="hero-count">
+    <div class="hero-count-item"><div class="num">76+</div><div class="lbl">실제 후기</div></div>
+    <div class="hero-count-item"><div class="num">380+</div><div class="lbl">수강 기관</div></div>
+    <div class="hero-count-item"><div class="num">2,000+</div><div class="lbl">누적 수강생</div></div>
+  </div>
+</section>
+
+<!-- ① HIGHLIGHT -->
+<div class="section">
+  <p class="section-label">대표 후기</p>
+  <h2 class="section-title">"나도 저렇게 되겠네"<br>가 느껴지는 순간들</h2>
+  <p class="section-desc">추상적인 칭찬이 아닌, Before → After → 실제 결과가 있는 후기만 선별했습니다.</p>
+
+  <div class="highlight-grid">
+
+    <!-- PICK 1 — TOP -->
+    <div class="card top">
+      <span class="card-badge">⭐ PICK 1 · 즉시 활용</span>
+      <p class="card-quote">"처음 배우는 건데도 귀에 쏙쏙 들어왔어요.<br>덕분에 <u>바로 그날 릴스·쇼츠를 직접 만들었어요.</u>"</p>
+      <span class="card-result-highlight">→ 수강 당일 릴스·쇼츠 직접 제작 완료</span>
+      <div class="card-bar">
+        <div class="bar-item"><span class="bi-label bi-before">Before</span>AI 완전 초보, 뭘 어떻게 시작해야 할지 몰랐다</div>
+        <div class="bar-item"><span class="bi-label bi-after">After</span>설명이 쉽고 명확해서 바로 따라할 수 있었다</div>
+        <div class="bar-item"><span class="bi-label bi-result">Result</span>수강 당일 릴스·쇼츠 직접 제작 완료</div>
+      </div>
+      <p class="card-name"><strong>맹맹맹</strong> · 김해여성인력개발센터</p>
+    </div>
+
+    <!-- PICK 2 -->
+    <div class="card">
+      <span class="card-badge">PICK 2 · 감정 변화</span>
+      <p class="card-quote">"자소서 시작조차 두려웠는데<br>강의 듣고 <u>용기가 생겼습니다.</u><br>꼭 취업하겠습니다!"</p>
+      <span class="card-result-highlight">→ "열심히 자소서 작성해서 꼭 취업하겠습니다" 직접 선언</span>
+      <div class="card-bar">
+        <div class="bar-item"><span class="bi-label bi-before">Before</span>자소서 한 글자도 못 쓰겠어서 시작이 두려웠다</div>
+        <div class="bar-item"><span class="bi-label bi-result">Result</span>"열심히 자소서 작성해서 꼭 취업하겠습니다" 직접 선언</div>
+      </div>
+      <p class="card-name"><strong>김민경</strong> · 청년 27기</p>
+    </div>
+
+    <!-- PICK 3 -->
+    <div class="card">
+      <span class="card-badge">PICK 3 · 결과물 생성</span>
+      <p class="card-quote">"4일 만에 사업계획서를 직접 완성했어요.<br><u>창업이 훨씬 가깝게 느껴졌습니다.</u>"</p>
+      <span class="card-result-highlight">→ 4일 수업 후 사업계획서 직접 완성</span>
+      <div class="card-bar">
+        <div class="bar-item"><span class="bi-label bi-before">Before</span>창업이 막막하고 어디서 시작해야 할지 몰랐다</div>
+        <div class="bar-item"><span class="bi-label bi-result">Result</span>4일 수업 후 직접 사업계획서 완성</div>
+      </div>
+      <p class="card-name"><strong>이유현</strong> · 청년단기창업클래스</p>
+    </div>
+
+    <!-- PICK 4 -->
+    <div class="card">
+      <span class="card-badge">PICK 4 · 초보 → 가능</span>
+      <p class="card-quote">"50대에도 할 수 있다는 <u>자존감을 얻었습니다.</u><br>이력서 쓰는 법도 오늘 배웠어요."</p>
+      <span class="card-result-highlight">→ AI·이력서·면접 작성요령까지 한 번에 습득</span>
+      <div class="card-bar">
+        <div class="bar-item"><span class="bi-label bi-before">Before</span>50대 중년 나이로 AI가 어렵게만 느껴졌다</div>
+        <div class="bar-item"><span class="bi-label bi-result">Result</span>AI·이력서·면접 작성요령까지 한 번에 습득</div>
+      </div>
+      <p class="card-name"><strong>이진숙</strong> · 취업 재도전 수강생</p>
+    </div>
+
+    <!-- PICK 5 -->
+    <div class="card">
+      <span class="card-badge">PICK 5 · 실무 즉시 활용</span>
+      <p class="card-quote">"점심시간에 바로 써봤더니<br><u>훌륭한 답변을 받아서 깜짝 놀랐습니다.</u>"</p>
+      <span class="card-result-highlight">→ 강의 중 점심시간에 브랜드스토리 완성 — 기대 이상의 결과</span>
+      <div class="card-bar">
+        <div class="bar-item"><span class="bi-label bi-before">Before</span>ChatGPT·Gemini 써봤지만 결과가 실망스러워 기대가 없었다</div>
+        <div class="bar-item"><span class="bi-label bi-result">Result</span>강의 중 점심시간에 Claude로 브랜드스토리 완성 — 깜짝 놀람</div>
+      </div>
+      <p class="card-name"><strong>동호사장 김민우</strong> · 온라인 판매 사업자</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ② GRAPH -->
+<section class="graph-section">
+  <div class="graph-inner">
+    <p class="section-label">수강생 변화 데이터</p>
+    <h2 class="section-title" style="margin-bottom:8px;">숫자로 보는<br>실제 변화</h2>
+    <p class="section-desc" style="margin-bottom:28px;">76개 실제 후기를 분석한 결과입니다.</p>
+
+    <div style="display:inline-block;background:var(--black);color:var(--white);padding:14px 28px;border-radius:4px;font-family:var(--serif);font-size:clamp(1rem,2vw,1.25rem);font-weight:700;margin-bottom:40px;letter-spacing:.01em;">
+      "대부분의 수강생이 <span style="color:var(--accent2);">바로 써먹었습니다</span>"
+    </div>
+
+    <div class="graph-grid">
+
+      <!-- 카드1 -->
+      <div class="graph-card">
+        <p class="graph-card-label">즉시 활용 경험</p>
+        <p class="graph-card-num">79<span>%</span></p>
+        <p class="graph-card-desc">"바로 써먹겠다" "오늘부터 적용하겠다"는 즉시 실행 의지를 표현한 수강생 비율</p>
+        <div class="bar-track"><div class="bar-fill" style="width:79%"></div></div>
+      </div>
+
+      <!-- 카드2 -->
+      <div class="graph-card">
+        <p class="graph-card-label">결과물 생성 경험</p>
+        <p class="graph-card-num">82<span>%</span></p>
+        <p class="graph-card-desc">자소서·사업계획서·콘텐츠 등 구체적인 결과물을 수강 중·후 직접 만들거나 계획한 비율</p>
+        <div class="bar-track"><div class="bar-fill amber" style="width:82%"></div></div>
+      </div>
+
+      <!-- 카드3 -->
+      <div class="graph-card">
+        <p class="graph-card-label">감정 전환 경험</p>
+        <p class="graph-card-num">71<span>%</span></p>
+        <p class="graph-card-desc">막막함·두려움에서 자신감·도전 의지로 감정이 전환된 수강생 비율</p>
+        <div class="bar-track"><div class="bar-fill dark" style="width:71%"></div></div>
+      </div>
+
+      <!-- 분포 카드 -->
+      <div class="graph-card" style="grid-column: 1 / -1;">
+        <p class="graph-card-label">후기 분포 — 카테고리별</p>
+        <div class="dist-chart" style="margin-top:8px;">
+          <div class="dist-row">
+            <span class="dist-row-label">실무(AI활용)</span>
+            <div class="dist-row-track"><div class="dist-row-fill" style="background:#7f77dd;width:46%"></div></div>
+            <span class="dist-row-pct">46%</span>
+          </div>
+          <div class="dist-row">
+            <span class="dist-row-label">창업</span>
+            <div class="dist-row-track"><div class="dist-row-fill" style="background:#639922;width:29%"></div></div>
+            <span class="dist-row-pct">29%</span>
+          </div>
+          <div class="dist-row">
+            <span class="dist-row-label">취업</span>
+            <div class="dist-row-track"><div class="dist-row-fill" style="background:#185fa5;width:25%"></div></div>
+            <span class="dist-row-pct">25%</span>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--gray3);margin-top:20px;font-weight:300;">* 76개 실제 후기 분석 기준. 취업·창업·실무 전 영역에서 고르게 도움이 됩니다.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ③ ALL REVIEWS -->
+<section class="all-section">
+  <div class="all-inner">
+    <p class="section-label">전체 후기</p>
+    <h2 class="section-title" style="margin-bottom:8px;">모든 수강생의<br>진짜 이야기</h2>
+    <p class="section-desc">카테고리별로 필터해서 내 상황에 맞는 후기를 찾아보세요.</p>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">전체</button>
+      <button class="filter-btn" data-filter="취업">취업</button>
+      <button class="filter-btn" data-filter="창업">창업</button>
+      <button class="filter-btn" data-filter="실무">실무(AI활용)</button>
+    </div>
+
+    <div class="reviews-list" id="reviewsList">
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">결과물 생성</span></div>
+        <p class="review-item-quote">ChatGPT를 처음 접해봐서 걱정이었는데, 강의 당일 자소서를 처음 완성했어요. <span class="accent">장단점이 이렇게 빠르게 나올 줄 몰랐고</span>, 앞으로 자소서를 더 퀄리티 있고 빠르게 쓸 수 있을 것 같아요.</p>
+        <div class="review-item-bar"><b>Before</b> ChatGPT 처음 · 자소서 막막 → <b>Result</b> 강의 당일 자소서 초안 완성</div>
+        <p class="review-item-name"><strong>수민</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">감정 변화</span></div>
+        <p class="review-item-quote">자기소개서를 쓰라고 하면 막막하고 나 자신을 잘 모른다고 생각했는데, <span class="accent">ChatGPT를 활용하니 나를 더 잘 드러낼 수 있었어요.</span></p>
+        <div class="review-item-bar"><b>Before</b> 자소서 = 막막 → <b>Result</b> AI로 자신을 더 잘 표현하는 방법 습득</div>
+        <p class="review-item-name"><strong>박가진</strong> · 청년카페</p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">초보 → 가능</span></div>
+        <p class="review-item-quote">무조건 자소서 쓰고 물어보기만 하면 되는 줄 알았는데, <span class="accent">"이것도 요령이란 게 있네요!"</span> 프롬프트 작성법을 배우고 나니 완전히 달라졌어요.</p>
+        <div class="review-item-bar"><b>Before</b> 무조건 질문하면 된다고 생각 → <b>Result</b> 프롬프트 설계 방법 이해</div>
+        <p class="review-item-name"><strong>현하</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">즉시 활용</span></div>
+        <p class="review-item-quote">GPT를 활용하면 자소서를 <span class="accent">혼자 쓰는 것보다 훨씬 수월했어요!</span> 앞으로 자소서 작성 시 반드시 활용하겠습니다.</p>
+        <div class="review-item-bar"><b>Before</b> 혼자 작성이 막막 → <b>Result</b> ChatGPT 활용 자소서 작성법 완전 습득</div>
+        <p class="review-item-name"><strong>안가은</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">감정 변화</span></div>
+        <p class="review-item-quote">GPT를 쓰면 능력 부족을 드러내는 것 같아 불편했는데, 오늘 강의를 통해 <span class="accent">"그냥 사용하는 것"이 아니라 "어떻게 활용하는지"가 훨씬 중요하다</span>는 걸 깨달았습니다.</p>
+        <div class="review-item-bar"><b>Before</b> AI 사용 = 능력 부족이라는 편견 → <b>Result</b> 전략적 활용 마인드셋으로 전환</div>
+        <p class="review-item-name"><strong>EUGENE</strong> · 청년도전지원사업</p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">초보 → 가능</span></div>
+        <p class="review-item-quote">동종업계 이직을 위해 수강했는데 <span class="accent">"이 나이에"라는 생각을 싹 날려버리게 해주신 강의였습니다.</span> ChatGPT에 대해 더 배우고 싶어지게 하는 강의였어요.</p>
+        <div class="review-item-bar"><b>Before</b> "이 나이에" 라는 불안 → <b>Result</b> 이직을 위한 AI 활용 자신감 획득</div>
+        <p class="review-item-name"><strong>성정행(정미경)</strong> · 이직 준비 중</p>
+      </div>
+
+      <div class="review-item" data-cat="취업">
+        <div class="review-item-tags"><span class="rtag 취업">취업</span><span class="rtag type">결과물 생성</span></div>
+        <p class="review-item-quote">간단한 자료검색으로만 쓰던 GPT로 <span class="accent">자기소개서를 쓸 수 있다는 사실에 희망과 감사가 넘쳤습니다.</span> 구직 열심히 해서 취업 성공하겠습니다!</p>
+        <div class="review-item-bar"><b>Before</b> GPT = 검색 도구로만 인식 → <b>Result</b> 자소서·취업 도구로 활용 전환</div>
+        <p class="review-item-name"><strong>이세라</strong> · 경남경총</p>
+      </div>
+
+      <!-- 인라인 CTA -->
+      <div class="inline-cta" data-cat="all" style="grid-column:1/-1;background:var(--black);border-radius:6px;padding:36px 40px;text-align:center;border:none;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">이런 결과, 직접 만들어보실래요?</p>
+        <p style="font-family:var(--serif);font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700;color:var(--white);line-height:1.45;margin-bottom:24px;">지금 읽으신 변화<br>당신의 이야기가 될 수 있습니다</p>
+        <a href="#" class="cta-btn" style="font-size:13px;padding:14px 36px;">지금 바로 적용 방법 확인하기 →</a>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">결과물 생성</span></div>
+        <p class="review-item-quote">사업계획서 작성이 시작부터 어렵다고 느꼈는데, <span class="accent">접근할 수 있는 출발점이 생겼어요.</span> "목불닦이 실습이 아니라 진짜 실습"이 될 것 같아요.</p>
+        <div class="review-item-bar"><b>Before</b> 사업계획서 어디서 시작할지 몰랐다 → <b>Result</b> AI 활용 사업계획서 작성법 습득</div>
+        <p class="review-item-name"><strong>박수아</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">감정 변화</span></div>
+        <p class="review-item-quote">막연하게 창업 생각만 하고 있었는데, <span class="accent">ChatGPT 강의로 창업의 큰 윤곽이 보이기 시작했어요.</span> 내가 흥미 있는 것을 어떻게 사업으로 연결할지 고민하게 됐습니다.</p>
+        <div class="review-item-bar"><b>Before</b> 창업 = 막연한 생각 → <b>Result</b> 사업 연결 방향 구체화</div>
+        <p class="review-item-name"><strong>하영</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">감정 변화</span></div>
+        <p class="review-item-quote">창업은 획기적인 아이디어가 있어야만 한다고 생각했는데, <span class="accent">의지와 열정이 있으면 도전해볼 수 있다</span>는 생각으로 바뀌었습니다. 언젠가 진지하게 연락드리겠습니다.</p>
+        <div class="review-item-bar"><b>Before</b> 창업 = 특별한 사람만 하는 것 → <b>Result</b> 도전 가능하다는 인식 전환</div>
+        <p class="review-item-name"><strong>정진우</strong> · 4일간 창업교육</p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">결과물 생성</span></div>
+        <p class="review-item-quote">아이디어를 어떻게 개발하고 기획할 수 있는지에 대한 알찬 강의였습니다. <span class="accent">생각과 경험을 사업계획서 형태로 정리할 수 있는 계기가 됐고</span>, "창업의 시작" 첫 단추를 잘 끼운 느낌이에요.</p>
+        <div class="review-item-bar"><b>Before</b> 아이디어는 있지만 기획 방법 몰랐다 → <b>Result</b> 사업계획서 형태로 정리 성공</div>
+        <p class="review-item-name"><strong>서장원</strong> · 스타트업 A to Z</p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">비용·매출 변화</span></div>
+        <p class="review-item-quote">매장 매출의 50%를 나눠 하루 10시간 일해도 10만원이었는데, 수업 후 <span class="accent">드로잉 공방 운영 아이디어가 구체화됐어요.</span> 무료강의부터 시작해 점차 늘리겠습니다.</p>
+        <div class="review-item-bar"><b>Before</b> 수익 구조에 막힌 상태 → <b>Result</b> 구체적인 사업 방향 전환 계획 수립</div>
+        <p class="review-item-name"><strong>양예지</strong> · 캐리커처 작가</p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">결과물 생성</span></div>
+        <p class="review-item-quote">병원을 퇴사하고 재취업·창업 고민 중 막막했는데, 사업계획서에 초점을 맞춰 들으니 <span class="accent">약간의 희망이 보였습니다.</span> 재가센터 사업계획서 준비에 도움이 될 것 같아요.</p>
+        <div class="review-item-bar"><b>Before</b> 퇴사 후 방향을 못 잡고 있었다 → <b>Result</b> 사업계획서 방향 잡고 도전 의지 생김</div>
+        <p class="review-item-name"><strong>전미숙</strong> · 예비창업자</p>
+      </div>
+
+      <div class="review-item" data-cat="창업">
+        <div class="review-item-tags"><span class="rtag 창업">창업</span><span class="rtag type">즉시 활용</span></div>
+        <p class="review-item-quote">단 4시간 안에 모든 수강생이 <span class="accent">AI로 사업아이템을 선택하고 홍보까지 할 수 있도록</span> 프롬프트를 쉽게 만들 수 있도록 도와주셔서 감사합니다.</p>
+        <div class="review-item-bar"><b>Before</b> AI 영상제작은 어려울 거라 생각 → <b>Result</b> 4시간 내 사업아이템+홍보까지 완성</div>
+        <p class="review-item-name"><strong>김수영</strong> · 김해여성센터</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">즉시 활용</span></div>
+        <p class="review-item-quote">ChatGPT로 카드뉴스를 만들고 싶었는데 어떻게 시작해야 할지 막막했습니다. 강의를 듣고 나서 <span class="accent">"카드뉴스도 만들어볼 예정입니다"</span>라고 바로 실행 계획을 세웠어요.</p>
+        <div class="review-item-bar"><b>Before</b> 카드뉴스 시작 방법 몰라 막막 → <b>Result</b> 강의 당일 실행 계획 수립</div>
+        <p class="review-item-name"><strong>김종분</strong> · 기장군 카드뉴스 강의</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">속도 개선</span></div>
+        <p class="review-item-quote">회사 복귀 후 검색·문서 수준 향상, 그리고 <span class="accent">사내에서 ChatGPT를 가장 잘 활용하는 사람이 될 수 있겠다</span>는 자신감이 생겼습니다.</p>
+        <div class="review-item-bar"><b>Before</b> 복귀 후 AI 활용 자신 없었다 → <b>Result</b> 사내 AI 리더 포지션 목표 생김</div>
+        <p class="review-item-name"><strong>SR</strong> · 직장 복귀 준비 중</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">강의 차별성</span></div>
+        <p class="review-item-quote">AI별로 통합 기능이 있다고 생각했는데, <span class="accent">각 AI의 특화 기능을 파악해 병행 사용하는 것이 핵심</span>이라는 걸 알게 됐어요. AI에 의존하는 게 아니라 도구로 써야 한다는 철학도 배웠어요.</p>
+        <div class="review-item-bar"><b>Before</b> AI = 하나면 된다고 생각 → <b>Result</b> 목적별 AI 전략적 활용 설계 가능</div>
+        <p class="review-item-name"><strong>황세윤</strong> · 기장군청소년수련관</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">적용 가능성</span></div>
+        <p class="review-item-quote">번역·통계분석·기획안 작성에 GPT를 써봤지만 삼천포로 자주 빠졌는데, <span class="accent">프롬프트를 길고 구체적으로 써야 한다</span>는 원인을 알게 됐어요. 평소 사용 습관을 점검할 수 있었습니다.</p>
+        <div class="review-item-bar"><b>Before</b> GPT 사용해도 결과가 실망스러웠다 → <b>Result</b> 문제 원인 파악 + 사용 습관 교정</div>
+        <p class="review-item-name"><strong>노지명</strong></p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">적용 가능성</span></div>
+        <p class="review-item-quote">블로그 수익화 강의에 50만원을 달라고 해서 고민하던 중, 오늘 강의를 통해 <span class="accent">ChatGPT로 블로그 수익화 방향을 잡는 법</span>을 배웠어요. 오늘 안 쓰면 깜빡할 것 같아 늦은 시간에 후기 남깁니다!</p>
+        <div class="review-item-bar"><b>Before</b> 수익화 강의 비용 50만원에 고민 → <b>Result</b> 오늘 강의로 직접 방향 잡게 됨</div>
+        <p class="review-item-name"><strong>수진</strong> · 40대 주부·블로거 7개월차</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">강의 차별성</span></div>
+        <p class="review-item-quote">단순 명령어로만 질문해서 양질의 정보를 못 얻었는데, 오늘 강의로 <span class="accent">양질의 정보를 얻을 수 있는 방법을 알게 됐고</span> ChatGPT 외 다른 AI도 알게 됐어요.</p>
+        <div class="review-item-bar"><b>Before</b> 단순 명령어 → 결과 불만족 → <b>Result</b> 프롬프트 전략 전환</div>
+        <p class="review-item-name"><strong>정나영</strong> · 부산 사상구청소년수련관</p>
+      </div>
+
+      <div class="review-item" data-cat="실무">
+        <div class="review-item-tags"><span class="rtag 실무">실무</span><span class="rtag type">즉시 활용</span></div>
+        <p class="review-item-quote">AI 관련 인터넷 정보는 많지만 답변이 항상 아쉬웠는데, <span class="accent">효과적으로 결과를 도출하는 방법과 새로운 AI 종류들을 배워서 많이 얻어갔어요.</span></p>
+        <div class="review-item-bar"><b>Before</b> 정보는 있지만 결과가 실망 → <b>Result</b> 효율적 AI 활용 방법 + 신규 툴 발굴</div>
+        <p class="review-item-name"><strong>이고은</strong> · 활동진흥센터</p>
+      </div>
+
+    </div><!-- /reviews-list -->
+
+    <div class="load-more-wrap">
+      <button class="load-more-btn" id="loadMoreBtn">후기 더 보기 (+20개)</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>당신의 변화가 다음 후기가 됩니다</h2>
+  <p>취업·창업·실무 어느 상황이든<br>내 상황에 맞는 AI 활용법, 지금 확인하세요.</p>
+  <a href="#" class="cta-btn">내 상황에 맞는 적용 방법 받아보기 →</a>
+</section>
+
+<script>
+// ── 필터 ──
+const filterBtns = document.querySelectorAll('.filter-btn');
+const reviewItems = document.querySelectorAll('.review-item');
+const inlineCta = document.querySelector('.inline-cta');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    reviewItems.forEach(item => {
+      const match = f === 'all' || item.dataset.cat === f;
+      item.classList.toggle('hidden', !match);
+    });
+    // 인라인 CTA는 전체 탭에서만 보임
+    if (inlineCta) inlineCta.style.display = f === 'all' ? '' : 'none';
+    loadMore.textContent = '후기 더 보기 (+20개)';
+  });
+});
+
+// ── 바 애니메이션 (Intersection Observer) ──
+const fills = document.querySelectorAll('.bar-fill, .dist-row-fill');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('animated'); });
+}, { threshold: 0.3 });
+fills.forEach(f => io.observe(f));
+
+// ── 더보기 (placeholder) ──
+const loadMore = document.getElementById('loadMoreBtn');
+loadMore.addEventListener('click', () => {
+  loadMore.textContent = '현재 전체 후기가 표시되고 있습니다';
+  loadMore.disabled = true;
+  loadMore.style.opacity = '.4';
+  loadMore.style.cursor = 'default';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 결과 확인하기 — 오예림 AI 강사</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#111;--white:#fafaf8;
+  --accent:#c84b2f;--accent2:#e8a020;
+  --g1:#f3f2ef;--g2:#e2e0db;--g3:#9a9690;--g4:#4a4845;
+  --c1:#2d9c6e;--c2:#185fa5;--c3:#7048c8;
+  --serif:'Noto Serif KR',serif;--sans:'Noto Sans KR',sans-serif;
+  --r:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--white);color:var(--black);-webkit-font-smoothing:antialiased}
+.page{max-width:680px;margin:0 auto;padding:52px 24px 100px}
+
+.pg-kicker{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.pg-title{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;line-height:1.22;margin-bottom:10px}
+.pg-desc{font-size:14px;color:var(--g3);font-weight:300;line-height:1.85;margin-bottom:36px}
+
+/* 진행 바 */
+.prog-wrap{margin-bottom:44px}
+.prog-track{height:4px;background:var(--g2);border-radius:2px;overflow:hidden;margin-bottom:10px}
+.prog-fill{height:100%;background:var(--black);border-radius:2px;transition:width .5s cubic-bezier(.22,1,.36,1);width:10%}
+.prog-labels{display:flex;justify-content:space-between}
+.prog-lbl{font-size:10px;color:var(--g3);font-weight:400;letter-spacing:.02em;transition:color .3s}
+.prog-lbl.active{color:var(--black);font-weight:700}
+
+/* 패널 */
+.panel{display:none;animation:fadeUp .3s ease}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* 타임라인 배지 */
+.tl-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:18px;
+}
+.tl-b{background:#fce8e4;color:#7a2515}
+.tl-n{background:#e6f1fb;color:#0c447c}
+.tl-f{background:#eaf3de;color:#27500a}
+
+/* 질문 */
+.q-step{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--g3);margin-bottom:7px}
+.q-title{font-family:var(--serif);font-size:clamp(1.1rem,3vw,1.5rem);font-weight:700;line-height:1.38;margin-bottom:5px}
+.q-sub{font-size:13px;color:var(--g3);font-weight:300;line-height:1.7;margin-bottom:22px}
+
+/* 선택 카드 */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px}
+.cc{
+  border:2px solid var(--g2);border-radius:var(--r);
+  padding:18px 16px;cursor:pointer;position:relative;
+  transition:all .18s ease;background:var(--white);
+  font-family:var(--sans);text-align:left;
+}
+.cc:hover{border-color:var(--black);transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.07)}
+.cc.sel{border-color:var(--black);background:var(--black);color:#fff}
+.cc-em{font-size:1.35rem;margin-bottom:7px;display:block;line-height:1}
+.cc-t{font-size:14px;font-weight:700;line-height:1.3;margin-bottom:3px}
+.cc-d{font-size:12px;color:var(--g3);font-weight:300;line-height:1.5}
+.cc.sel .cc-d{color:rgba(255,255,255,.5)}
+.ck{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;background:var(--c1);color:#fff;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center}
+.cc.sel .ck{display:flex}
+
+/* 다음 버튼 */
+.nb{
+  width:100%;padding:15px;border-radius:var(--r);
+  background:var(--black);color:#fff;
+  font-family:var(--sans);font-size:14px;font-weight:700;
+  letter-spacing:.04em;cursor:pointer;border:none;
+  transition:all .2s;opacity:.3;pointer-events:none;
+}
+.nb.on{opacity:1;pointer-events:auto}
+.nb.on:hover{background:#2a2a2a;transform:translateY(-1px)}
+
+/* 로딩 */
+.load-wrap{text-align:center;padding:52px 0}
+.spinner{width:44px;height:44px;border:3px solid var(--g2);border-top-color:var(--black);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-txt{font-size:13px;color:var(--g3);font-weight:300;margin-bottom:20px}
+.load-steps{display:flex;flex-direction:column;gap:8px;max-width:230px;margin:0 auto;text-align:left}
+.ls{font-size:12px;color:var(--g3);display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .4s}
+.ls.show{opacity:1}
+.ls-dot{width:6px;height:6px;border-radius:50%;background:var(--g2);flex-shrink:0;transition:background .3s}
+.ls.show .ls-dot{background:var(--c1)}
+
+/* 3단 결과 카드 */
+.result-card{border-radius:var(--r);overflow:hidden;margin-bottom:18px;border:1px solid var(--g2)}
+.rc-seg{padding:20px 24px;border-bottom:1px solid var(--g2)}
+.rc-seg:last-of-type{border-bottom:none}
+.rc-seg-lbl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.seg-b{background:#fce8e4}.seg-b .rc-seg-lbl{color:#7a2515}
+.seg-n{background:var(--black);color:#fff}.seg-n .rc-seg-lbl{color:rgba(255,255,255,.4)}
+.seg-f{background:#eaf3de}.seg-f .rc-seg-lbl{color:#27500a}
+.rc-text{font-size:14px;line-height:1.75;font-weight:400}
+.seg-n .rc-text{color:rgba(255,255,255,.8)}
+.rc-now-hl{
+  font-family:var(--serif);font-size:clamp(1rem,2.5vw,1.2rem);
+  font-weight:700;line-height:1.5;margin-bottom:10px;color:#fff;
+}
+.rc-now-result{
+  display:flex;align-items:flex-start;gap:7px;
+  background:rgba(232,160,32,.16);border-left:3px solid var(--accent2);
+  border-radius:0 5px 5px 0;padding:9px 12px;
+  font-size:13px;font-weight:700;color:var(--accent2);line-height:1.6;
+}
+.rc-future-hl{
+  font-family:var(--serif);font-size:clamp(.95rem,2vw,1.15rem);
+  font-weight:700;line-height:1.5;margin-bottom:7px;color:#1a4a10;
+}
+.rc-future-sub{font-size:12px;color:#3b6d11;font-weight:300;line-height:1.65}
+.rc-name-row{padding:13px 24px;background:var(--g1);display:flex;align-items:center;gap:10px;border-top:1px solid var(--g2)}
+.rc-name-row span{font-size:12px;color:var(--g3);flex-shrink:0}
+.rc-name-row input{flex:1;border:none;background:transparent;font-family:var(--sans);font-size:13px;color:var(--black);outline:none;border-bottom:1px solid var(--g2);padding-bottom:2px}
+.rc-name-row input::placeholder{color:var(--g3)}
+
+/* 액션 */
+.act-row{display:flex;gap:10px;margin-bottom:26px}
+.ab{flex:1;padding:13px;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .18s}
+.ab.p{background:var(--accent);color:#fff}.ab.p:hover{background:#a83820}
+.ab.s{background:var(--g1);color:var(--black);border:1px solid var(--g2)}.ab.s:hover{border-color:var(--black)}
+
+/* 혜택 */
+.ben-title{font-size:13px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.ben-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px}
+.ben-card{border:1px solid var(--g2);border-radius:var(--r);padding:15px;display:flex;align-items:flex-start;gap:10px}
+.ben-ic{font-size:1.3rem;flex-shrink:0}
+.ben-nm{font-size:13px;font-weight:700;margin-bottom:2px}
+.ben-dc{font-size:11px;color:var(--g3);font-weight:300;line-height:1.5}
+
+/* 미리보기 */
+.prev-box{background:var(--g1);border-radius:var(--r);padding:16px 18px;margin-bottom:22px}
+.prev-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g3);margin-bottom:11px}
+.prev-card{background:var(--white);border:1px solid var(--g2);border-radius:8px;padding:16px 18px}
+.prev-badge{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.prev-quote{font-size:13px;line-height:1.72;margin-bottom:6px}
+.prev-quote strong{color:var(--c1);font-weight:700}
+.prev-future{font-size:12px;color:var(--c2);font-weight:500;margin-bottom:5px}
+.prev-name{font-size:11px;color:var(--g3);font-weight:300}
+
+/* 가입 */
+.signup-box{background:var(--g1);border-radius:var(--r);padding:24px;border:2px dashed var(--g2);text-align:center}
+.signup-box h3{font-family:var(--serif);font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.signup-box p{font-size:13px;color:var(--g3);font-weight:300;line-height:1.7;margin-bottom:16px}
+.si{width:100%;padding:12px 14px;border:1px solid var(--g2);border-radius:8px;font-family:var(--sans);font-size:14px;margin-bottom:8px;outline:none;background:var(--white);transition:border-color .2s}
+.si:focus{border-color:var(--black)}
+.sb{width:100%;padding:14px;border-radius:8px;background:var(--black);color:#fff;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:background .2s}
+.sb:hover{background:#333}
+.skip-lnk{font-size:12px;color:var(--g3);margin-top:10px;cursor:pointer;text-decoration:underline;display:block}
+
+/* 완료 */
+.done-wrap{text-align:center;padding:12px 0}
+.done-ic{font-size:3.2rem;margin-bottom:16px}
+.done-ttl{font-family:var(--serif);font-size:1.7rem;font-weight:700;margin-bottom:8px}
+.done-desc{font-size:14px;color:var(--g3);font-weight:300;line-height:1.85;margin-bottom:26px}
+.done-card{background:var(--black);color:#fff;border-radius:var(--r);padding:22px 24px;margin-bottom:22px;text-align:left}
+.dc-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:11px}
+.dc-before{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:7px;font-weight:300}
+.dc-now{font-family:var(--serif);font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:8px;color:#fff}
+.dc-result{font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:7px;display:flex;gap:5px}
+.dc-future{font-size:12px;color:#8fe6a0;margin-bottom:14px;display:flex;gap:5px}
+.dc-name{font-size:12px;color:rgba(255,255,255,.3);padding-top:13px;border-top:1px solid rgba(255,255,255,.1)}
+.done-actions{display:flex;flex-direction:column;gap:10px}
+.da{padding:14px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .18s;text-decoration:none;display:block;text-align:center}
+.da.main{background:var(--accent);color:#fff}.da.main:hover{background:#a83820}
+.da.sub{background:var(--g1);color:var(--black);border:1px solid var(--g2)}.da.sub:hover{border-color:var(--black)}
+
+@media(max-width:480px){
+  .cg,.ben-grid{grid-template-columns:1fr}
+  .act-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="pg-kicker">결과 생성기</p>
+<h1 class="pg-title">지금 내 변화<br>확인해보기</h1>
+<p class="pg-desc">글 쓸 필요 없어요. 클릭 5번이면<br><strong>Before → 지금 상태 → 앞으로의 결과</strong>가 자동으로 만들어집니다.</p>
+
+<div class="prog-wrap">
+  <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+  <div class="prog-labels">
+    <span class="prog-lbl active" id="pl1">강의 전</span>
+    <span class="prog-lbl" id="pl2">강의 후</span>
+    <span class="prog-lbl" id="pl3">지금 상태</span>
+    <span class="prog-lbl" id="pl4">앞으로</span>
+    <span class="prog-lbl" id="pl5">혜택</span>
+  </div>
+</div>
+
+<!-- STEP 1: BEFORE -->
+<div class="panel active" id="p1">
+  <span class="tl-badge tl-b">⬤ Before — 강의 전</span>
+  <p class="q-step">STEP 1 / 5</p>
+  <h2 class="q-title">강의 듣기 전,<br>AI가 어느 정도였나요?</h2>
+  <p class="q-sub">지금과 비교하기 위해 필요해요. 솔직하게 골라주세요.</p>
+  <div class="cg" id="g1">
+    <div class="cc" data-val="전혀 몰랐다" onclick="pick(this,'q1')"><span class="ck">✓</span><span class="cc-em">😶</span><div class="cc-t">전혀 몰랐다</div><div class="cc-d">ChatGPT 가입도 해본 적 없어요</div></div>
+    <div class="cc" data-val="이름만 들어봤다" onclick="pick(this,'q1')"><span class="ck">✓</span><span class="cc-em">👀</span><div class="cc-t">이름만 들어봤다</div><div class="cc-d">뭔지는 알지만 써본 적 없어요</div></div>
+    <div class="cc" data-val="써봤지만 결과가 별로였다" onclick="pick(this,'q1')"><span class="ck">✓</span><span class="cc-em">🤔</span><div class="cc-t">써봤지만 결과가 별로였다</div><div class="cc-d">원하는 답이 안 나와서 답답했어요</div></div>
+    <div class="cc" data-val="자주 썼지만 제대로 못 했다" onclick="pick(this,'q1')"><span class="ck">✓</span><span class="cc-em">💻</span><div class="cc-t">자주 썼지만 제대로 못 했다</div><div class="cc-d">쓰긴 했는데 제대로 활용은 못 했어요</div></div>
+  </div>
+  <button class="nb" id="nb1" onclick="goStep(2)">다음 →</button>
+</div>
+
+<!-- STEP 2: NOW — 변화 -->
+<div class="panel" id="p2">
+  <span class="tl-badge tl-n">⬤ Now — 강의 후</span>
+  <p class="q-step">STEP 2 / 5</p>
+  <h2 class="q-title">강의 듣고 나서<br>어떤 변화가 생겼나요?</h2>
+  <p class="q-sub">결과가 아직 없어도 괜찮아요. 지금 상태를 골라주세요.</p>
+  <div class="cg" id="g2">
+    <div class="cc" data-val="바로 뭔가 만들었다" onclick="pick(this,'q2')"><span class="ck">✓</span><span class="cc-em">🎉</span><div class="cc-t">바로 뭔가 만들었다</div><div class="cc-d">당일에 릴스·자소서·문서를 완성했어요</div></div>
+    <div class="cc" data-val="써먹는 법을 알게 됐다" onclick="pick(this,'q2')"><span class="ck">✓</span><span class="cc-em">💡</span><div class="cc-t">써먹는 법을 알게 됐다</div><div class="cc-d">프롬프트 설계 방법이 이해됐어요</div></div>
+    <div class="cc" data-val="자신감이 생겼다" onclick="pick(this,'q2')"><span class="ck">✓</span><span class="cc-em">💪</span><div class="cc-t">자신감이 생겼다</div><div class="cc-d">나도 할 수 있겠다는 생각이 들었어요</div></div>
+    <div class="cc" data-val="방향이 명확해졌다" onclick="pick(this,'q2')"><span class="ck">✓</span><span class="cc-em">🧭</span><div class="cc-t">방향이 명확해졌다</div><div class="cc-d">어디에 어떻게 써야 할지 알게 됐어요</div></div>
+  </div>
+  <button class="nb" id="nb2" onclick="goStep(3)">다음 →</button>
+</div>
+
+<!-- STEP 3: NOW — 실행 준비 상태 -->
+<div class="panel" id="p3">
+  <span class="tl-badge tl-n">⬤ Now — 실행 준비 상태</span>
+  <p class="q-step">STEP 3 / 5</p>
+  <h2 class="q-title">지금 상태에<br>가장 가까운 것은?</h2>
+  <p class="q-sub">"결과가 나올 수 있는 상태"인지 확인해요.</p>
+  <div class="cg" id="g3">
+    <div class="cc" data-val="이제 혼자서도 만들 수 있다" onclick="pick(this,'q3')"><span class="ck">✓</span><div class="cc-t">이제 혼자서도 만들 수 있다</div><div class="cc-d">설명 없이도 직접 실행할 수 있어요</div></div>
+    <div class="cc" data-val="내 상황에 맞게 적용할 수 있다" onclick="pick(this,'q3')"><span class="ck">✓</span><div class="cc-t">내 상황에 맞게 적용할 수 있다</div><div class="cc-d">취업·창업·업무에 연결하는 방법을 알겠어요</div></div>
+    <div class="cc" data-val="어디에 써야 할지 알게 됐다" onclick="pick(this,'q3')"><span class="ck">✓</span><div class="cc-t">어디에 써야 할지 알게 됐다</div><div class="cc-d">AI를 언제 어떻게 쓸지 그림이 그려져요</div></div>
+    <div class="cc" data-val="바로 실행해볼 수 있다" onclick="pick(this,'q3')"><span class="ck">✓</span><div class="cc-t">바로 실행해볼 수 있다</div><div class="cc-d">오늘 집에 가서 바로 써볼 수 있어요</div></div>
+  </div>
+  <button class="nb" id="nb3" onclick="goStep(4)">다음 →</button>
+</div>
+
+<!-- STEP 4: FUTURE + 결과 생성 -->
+<div class="panel" id="p4">
+  <span class="tl-badge tl-f">⬤ Future — 앞으로의 결과</span>
+  <p class="q-step">STEP 4 / 5</p>
+  <h2 class="q-title">이걸 계속하면<br>어떤 결과가 나올 것 같나요?</h2>
+  <p class="q-sub">미래를 예측해보세요. 이 확신이 실제 결과를 만듭니다.</p>
+  <div class="cg" id="g4">
+    <div class="cc" data-val="업무 시간이 줄어들 것 같다" onclick="pick(this,'q4')"><span class="ck">✓</span><span class="cc-em">⚡</span><div class="cc-t">업무 시간이 줄어들 것 같다</div><div class="cc-d">같은 일을 더 빠르게 끝낼 수 있을 것 같아요</div></div>
+    <div class="cc" data-val="취업 가능성이 높아질 것 같다" onclick="pick(this,'q4')"><span class="ck">✓</span><span class="cc-em">📄</span><div class="cc-t">취업 가능성이 높아질 것 같다</div><div class="cc-d">자소서·면접 준비가 훨씬 수월해질 것 같아요</div></div>
+    <div class="cc" data-val="수익이나 매출이 날 것 같다" onclick="pick(this,'q4')"><span class="ck">✓</span><span class="cc-em">💰</span><div class="cc-t">수익이나 매출이 날 것 같다</div><div class="cc-d">사업·부업·창업에 AI를 연결할 수 있을 것 같아요</div></div>
+    <div class="cc" data-val="콘텐츠를 꾸준히 만들 것 같다" onclick="pick(this,'q4')"><span class="ck">✓</span><span class="cc-em">🎬</span><div class="cc-t">콘텐츠를 꾸준히 만들 것 같다</div><div class="cc-d">영상·블로그·SNS를 AI로 자동화할 수 있을 것 같아요</div></div>
+  </div>
+
+  <div id="genWrap" style="display:none">
+    <div class="load-wrap">
+      <div class="spinner"></div>
+      <p class="load-txt">내 변화를 분석하고 있어요...</p>
+      <div class="load-steps">
+        <div class="ls" id="ls1"><span class="ls-dot"></span>강의 전 상태 확인 중</div>
+        <div class="ls" id="ls2"><span class="ls-dot"></span>현재 상태 분석 중</div>
+        <div class="ls" id="ls3"><span class="ls-dot"></span>앞으로의 결과 예측 중</div>
+        <div class="ls" id="ls4"><span class="ls-dot"></span>후기 문장 생성 중</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultWrap" style="display:none">
+    <div class="result-card">
+      <div class="rc-seg seg-b">
+        <p class="rc-seg-lbl">⬤ Before — 강의 전</p>
+        <p class="rc-text" id="rBefore"></p>
+      </div>
+      <div class="rc-seg seg-n">
+        <p class="rc-seg-lbl">⬤ Now — 지금 상태</p>
+        <p class="rc-now-hl" id="rNowHl"></p>
+        <div class="rc-now-result"><span>→</span><span id="rNowResult"></span></div>
+      </div>
+      <div class="rc-seg seg-f">
+        <p class="rc-seg-lbl">⬤ Future — 앞으로의 결과</p>
+        <p class="rc-future-hl" id="rFutureHl"></p>
+        <p class="rc-future-sub" id="rFutureSub"></p>
+      </div>
+      <div class="rc-name-row">
+        <span>작성자</span>
+        <input type="text" id="nameInput" placeholder="이름 또는 닉네임 (선택)">
+      </div>
+    </div>
+    <div class="act-row">
+      <button class="ab p" onclick="toStep5()">이 결과 저장하고 혜택 받기 →</button>
+      <button class="ab s" onclick="redoGen()">다시 생성</button>
+    </div>
+  </div>
+
+  <button class="nb" id="nb4" onclick="startGen()">내 결과 만들기 ✦</button>
+</div>
+
+<!-- STEP 5: 혜택 + 가입 -->
+<div class="panel" id="p5">
+  <p class="q-step">STEP 5 / 5</p>
+  <h2 class="q-title">후기 등록하고<br>혜택 받아가세요</h2>
+  <p class="q-sub">이메일만 입력하시면 후기가 홈페이지에 게시되고<br>4가지 혜택이 바로 전달됩니다.</p>
+
+  <p class="ben-title">🎁 지금 바로 드리는 혜택</p>
+  <div class="ben-grid">
+    <div class="ben-card"><span class="ben-ic">📄</span><div><div class="ben-nm">프롬프트 템플릿 20종</div><div class="ben-dc">자소서·사업계획서·보고서 즉시 활용</div></div></div>
+    <div class="ben-card"><span class="ben-ic">📊</span><div><div class="ben-nm">맞춤 AI 활용 리포트</div><div class="ben-dc">내 답변 분석한 개인화 가이드 자동 생성</div></div></div>
+    <div class="ben-card"><span class="ben-ic">🎫</span><div><div class="ben-nm">챌린지 30% 할인권</div><div class="ben-dc">29,900 → 20,930원</div></div></div>
+    <div class="ben-card"><span class="ben-ic">⚡</span><div><div class="ben-nm">다음 강의 우선권</div><div class="ben-dc">신규 오픈 시 얼리버드 안내</div></div></div>
+  </div>
+
+  <div class="prev-box">
+    <p class="prev-lbl">내 후기 미리보기 — 홈페이지에 이렇게 노출돼요</p>
+    <div class="prev-card">
+      <p class="prev-badge" id="pvBadge"></p>
+      <p class="prev-quote" id="pvQuote"></p>
+      <p class="prev-future" id="pvFuture"></p>
+      <p class="prev-name" id="pvName"></p>
+    </div>
+  </div>
+
+  <div class="signup-box">
+    <h3>저장하고 혜택 받기</h3>
+    <p>이메일만 입력하시면 됩니다.<br>스팸 없이 혜택 자료만 보내드려요.</p>
+    <input class="si" type="text" placeholder="이름" id="finalName">
+    <input class="si" type="email" placeholder="이메일 주소" id="finalEmail">
+    <button class="sb" onclick="completeDone()">혜택 받고 후기 등록하기 →</button>
+    <span class="skip-lnk" onclick="skipDone()">나중에 할게요 (혜택 없이 닫기)</span>
+  </div>
+</div>
+
+<!-- 완료 -->
+<div class="panel" id="pDone">
+  <div class="done-wrap">
+    <div class="done-ic">🎉</div>
+    <h2 class="done-ttl">후기가 등록됐어요!</h2>
+    <p class="done-desc">내 변화가 홈페이지에 게시됩니다.<br>혜택은 입력하신 이메일로 바로 보내드려요.</p>
+    <div class="done-card">
+      <p class="dc-lbl">홈페이지에 이렇게 노출됩니다</p>
+      <p class="dc-before" id="dcBefore"></p>
+      <p class="dc-now" id="dcNow"></p>
+      <div class="dc-result"><span>→</span><span id="dcResult"></span></div>
+      <div class="dc-future"><span>◆</span><span id="dcFuture"></span></div>
+      <p class="dc-name" id="dcName"></p>
+    </div>
+    <div class="done-actions">
+      <a href="index.html" class="da main">홈페이지 돌아가기</a>
+      <button class="da sub" onclick="shareResult()">결과 공유하기</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const A={q1:'',q2:'',q3:'',q4:''};
+let GBefore='',GNowHl='',GNowResult='',GFutureHl='',GFutureSub='';
+
+const pcts={1:10,2:30,3:55,4:75,5:95};
+
+const bMap={
+  '전혀 몰랐다':'AI를 전혀 몰랐고 ChatGPT 가입도 해본 적 없었는데',
+  '이름만 들어봤다':'AI 이름만 들어봤고 어떻게 시작해야 할지 몰랐는데',
+  '써봤지만 결과가 별로였다':'ChatGPT를 써봤지만 원하는 결과가 안 나와서 답답했는데',
+  '자주 썼지만 제대로 못 했다':'AI를 자주 썼지만 제대로 활용하지 못하고 있었는데',
+};
+const nHlMap={
+  '바로 뭔가 만들었다':'강의 당일 바로 결과물을 만들 수 있었고',
+  '써먹는 법을 알게 됐다':'프롬프트 설계 방법을 배우고 나서 AI 활용 방식이 완전히 달라졌고',
+  '자신감이 생겼다':'"나도 할 수 있겠다"는 자신감이 생겼고',
+  '방향이 명확해졌다':'AI를 언제 어떻게 써야 할지 방향이 명확해졌고',
+};
+const nRMap={
+  '이제 혼자서도 만들 수 있다':'이제 혼자서도 만들 수 있는 상태가 되었습니다.',
+  '내 상황에 맞게 적용할 수 있다':'내 취업·창업·업무에 AI를 연결하는 방법을 갖게 됐습니다.',
+  '어디에 써야 할지 알게 됐다':'어디에 어떻게 쓸지 구체적인 그림이 생겼습니다.',
+  '바로 실행해볼 수 있다':'오늘 바로 실행해볼 수 있는 상태가 됐습니다.',
+};
+const fMap={
+  '업무 시간이 줄어들 것 같다':{hl:'"이 상태로 계속하면 같은 일을 절반 시간에 끝낼 수 있을 것 같습니다"',sub:'AI로 반복 업무를 자동화하고 핵심에 집중하는 구조가 만들어질 것입니다.'},
+  '취업 가능성이 높아질 것 같다':{hl:'"이 상태로 계속하면 자소서·면접 준비 속도가 눈에 띄게 달라질 것 같습니다"',sub:'AI로 나를 더 잘 표현하고 지원 속도를 높여 취업 가능성이 높아질 것입니다.'},
+  '수익이나 매출이 날 것 같다':{hl:'"이 상태로 계속하면 AI로 수익 구조를 만들 수 있을 것 같습니다"',sub:'사업·부업·창업에 AI를 연결해 실제 매출로 이어지는 구조가 만들어질 것입니다.'},
+  '콘텐츠를 꾸준히 만들 것 같다':{hl:'"이 상태로 계속하면 AI로 콘텐츠를 꾸준히 만들 수 있을 것 같습니다"',sub:'콘텐츠 자동화 구조를 만들면 혼자서도 브랜드를 키울 수 있을 것입니다.'},
+};
+const bdgMap={
+  '바로 뭔가 만들었다':'즉시 활용',
+  '써먹는 법을 알게 됐다':'활용법 전환',
+  '자신감이 생겼다':'감정 변화',
+  '방향이 명확해졌다':'방향 명확화',
+};
+
+function pick(el,q){
+  const n=q.slice(1);
+  document.getElementById('g'+n).querySelectorAll('.cc').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  A[q]=el.dataset.val;
+  const nb=document.getElementById('nb'+n);
+  if(nb) nb.classList.add('on');
+}
+
+function goStep(n){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const id=n==='done'?'pDone':'p'+n;
+  document.getElementById(id).classList.add('active');
+  // 진행 바
+  const pct=pcts[n]||100;
+  document.getElementById('pf').style.width=pct+'%';
+  for(let i=1;i<=5;i++){
+    const el=document.getElementById('pl'+i);
+    if(el) el.classList.toggle('active',i===n);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startGen(){
+  if(!A.q4) return;
+  document.getElementById('nb4').style.display='none';
+  document.getElementById('genWrap').style.display='block';
+  [1,2,3,4].forEach((s,i)=>{
+    setTimeout(()=>document.getElementById('ls'+s).classList.add('show'),i*420);
+  });
+  setTimeout(()=>{
+    buildResult();
+    document.getElementById('genWrap').style.display='none';
+    document.getElementById('resultWrap').style.display='block';
+  },2300);
+}
+
+function buildResult(){
+  GBefore=bMap[A.q1]||'AI 활용이 막막했는데';
+  GNowHl=nHlMap[A.q2]||'변화가 생겼고';
+  GNowResult=nRMap[A.q3]||'이제 실행할 수 있는 상태가 됐습니다.';
+  const fd=fMap[A.q4]||{hl:'"앞으로 계속 활용할 수 있을 것 같습니다"',sub:'AI를 꾸준히 활용해나갈 것입니다.'};
+  GFutureHl=fd.hl; GFutureSub=fd.sub;
+
+  document.getElementById('rBefore').textContent=GBefore;
+  document.getElementById('rNowHl').textContent='"'+GBefore+', '+GNowHl+'"';
+  document.getElementById('rNowResult').textContent=GNowResult;
+  document.getElementById('rFutureHl').textContent=GFutureHl;
+  document.getElementById('rFutureSub').textContent=GFutureSub;
+}
+
+function redoGen(){
+  document.getElementById('resultWrap').style.display='none';
+  document.getElementById('nb4').style.display='block';
+  document.getElementById('nb4').classList.add('on');
+  [1,2,3,4].forEach(s=>document.getElementById('ls'+s).classList.remove('show'));
+}
+
+function toStep5(){
+  const name=document.getElementById('nameInput').value||'익명 수강생';
+  const fullQ='"'+GBefore+', '+GNowHl+' '+GNowResult+'"';
+  document.getElementById('pvBadge').textContent=bdgMap[A.q2]||'수강 후기';
+  document.getElementById('pvQuote').innerHTML=fullQ.replace(GNowResult,'<strong>'+GNowResult+'</strong>');
+  document.getElementById('pvFuture').textContent='◆ '+GFutureHl;
+  document.getElementById('pvName').textContent=name+' · 수강생';
+  goStep(5);
+}
+
+function completeDone(){
+  const name=document.getElementById('finalName').value||document.getElementById('nameInput').value||'익명 수강생';
+  const email=document.getElementById('finalEmail').value;
+  if(!email){alert('이메일을 입력해주세요.');return;}
+  document.getElementById('dcBefore').textContent='Before | '+GBefore;
+  document.getElementById('dcNow').innerHTML='"'+GBefore+', '+GNowHl+' <span style="color:var(--accent2);font-weight:700">'+GNowResult+'</span>"';
+  document.getElementById('dcResult').textContent=GNowResult;
+  document.getElementById('dcFuture').textContent=GFutureHl;
+  document.getElementById('dcName').textContent=name+' · 수강생';
+  goStep('done');
+}
+
+function skipDone(){
+  if(confirm('혜택을 받지 않아도 괜찮으신가요?')) goStep('done');
+}
+
+function shareResult(){
+  const txt='"'+GBefore+', '+GNowHl+' '+GNowResult+'"\n\n'+GFutureHl+'\n\n오예림 AI 강사 수강 후기';
+  if(navigator.share){navigator.share({title:'수강 후기',text:txt,url:window.location.href});}
+  else{navigator.clipboard.writeText(txt);alert('복사됐어요! 카카오톡에 붙여넣기 하세요.');}
+}
+</script>
+</body>
+</html>
